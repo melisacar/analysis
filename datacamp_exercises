@@ -31,7 +31,7 @@ HAVING AVG(budget) > 1000000000
 -- Order by descending order of the aggregated budget
 ORDER BY average_budget DESC ;
 
---
+--4
 SELECT release_year, AVG(budget) AS avg_budget, AVG(gross) AS avg_gross
 FROM films
 WHERE release_year > 1990
@@ -40,3 +40,43 @@ HAVING AVG(budget) > 60000000
 -- Order the results from highest to lowest average gross and limit to one
 ORDER BY avg_gross DESC 
 LIMIT 1;
+
+
+
+
+-JOINING DATA
+--1
+SELECT * 
+FROM cities
+INNER JOIN countries
+ON cities.country_code = countries.code ;
+
+--2
+-- Select name fields (with alias) and region 
+SELECT cities.name as city, countries.name as country, region
+FROM cities
+INNER JOIN countries
+ON cities.country_code = countries.code ;
+
+
+--3
+-- Select fields with aliases
+SELECT c.code AS country_code, name, year, inflation_rate
+FROM countries AS c
+-- Join to economies (alias e)
+INNER JOIN economies AS e
+-- Match on code field using table aliases
+    ON c.code = e.code ;
+
+
+
+--4 Multiple INNER JOINS
+
+SELECT name, e.year, fertility_rate, unemployment_rate
+FROM countries AS c
+INNER JOIN populations AS p
+ON c.code = p.country_code
+INNER JOIN economies AS e
+ON c.code = e.code
+-- Add an additional joining condition such that you are also joining on year
+	AND e.year = p.year ;
