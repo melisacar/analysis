@@ -1,3 +1,5 @@
+-- Which release_year had the most language diversity ? 
+
 SELECT release_year, COUNT( DISTINCT language) AS distinct_lang
 FROM films
 GROUP BY release_year
