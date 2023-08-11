@@ -1,0 +1,4 @@
+SELECT release_year, COUNT( DISTINCT language) AS distinct_lang
+FROM films
+GROUP BY release_year
+ORDER BY distinct_lang ;
