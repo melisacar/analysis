@@ -181,3 +181,56 @@ WHERE p.year = 2010
 ORDER BY p.life_expectancy
 -- Limit to five records
 LIMIT 5;
+
+--13 and 14
+
+SELECT 
+	p1.country_code, 
+    p1.size AS size2010, 
+    p2.size AS size2015
+FROM populations AS p1
+INNER JOIN populations AS p2
+ON p1.country_code = p2.country_code
+WHERE p1.year = 2010
+-- Filter such that p1.year is always five years before p2.year
+    AND p1.year = p2.year -5 ;
+
+--15 UNION drops duplicates AND UNION ALL
+-- Query that determines all pairs of code and year from economies and populations, without duplicates
+SELECT country_code, year
+FROM populations
+UNION
+SELECT code, year
+FROM economies
+ORDER BY country_code, year ;
+
+--16 INTERSECT
+-- Return all cities with the same name as a country
+SELECT name
+FROM countries
+INTERSECT
+SELECT name
+FROM cities ;
+
+
+--Subquery 
+--Probably 30 falan
+SELECT *
+FROM populations
+-- Filter for only those populations where life expectancy is 1.15 times higher than average
+WHERE life_expectancy > 
+  (SELECT AVG(life_expectancy)
+   FROM populations
+   WHERE year = 2015)*1.15 
+    AND year = 2015;
+
+
+--
+-- Select relevant fields from cities table
+SELECT name, country_code, urbanarea_pop
+-- Filter using a subquery on the countries table
+FROM cities
+WHERE name IN 
+    (SELECT capital
+    FROM countries)
+ORDER BY urbanarea_pop DESC;
