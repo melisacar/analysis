@@ -247,3 +247,25 @@ GROUP BY country
 ORDER BY cities_num DESC, country ASC 
 LIMIT 9 ;
 
+
+--
+SELECT countries.name AS country,
+-- Subquery that provides the count of cities   
+  (SELECT COUNT(*)
+   FROM cities
+   WHERE cities.country_code=countries.code) AS cities_num
+FROM countries
+ORDER BY cities_num DESC, country
+LIMIT 9;
+
+
+--
+-- Select local_name and lang_num from appropriate tables
+SELECT countries.local_name, lang_num
+FROM countries,
+  (SELECT code, COUNT(*) AS lang_num
+  FROM languages
+  GROUP BY code) AS sub
+-- Where codes match
+WHERE sub.code=countries.code
+ORDER BY lang_num DESC;
