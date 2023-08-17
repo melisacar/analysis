@@ -234,3 +234,16 @@ WHERE name IN
     (SELECT capital
     FROM countries)
 ORDER BY urbanarea_pop DESC;
+
+
+---- cannot use aggregate function (COUNT) when using GROUP BY:
+Find top nine countries with the most cities
+SELECT countries.name AS country, COUNT(cities.name) AS cities_num
+FROM countries
+LEFT JOIN cities
+ON countries.code=cities.country_code
+-- Order by count of cities as cities_num
+GROUP BY country
+ORDER BY cities_num DESC, country ASC 
+LIMIT 9 ;
+
