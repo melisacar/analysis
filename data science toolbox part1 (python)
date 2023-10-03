@@ -1,8 +1,11 @@
+Data Science Toolbox I (Datacamp)
 ----------------------------------------------------------------------------------------------------------------------------------
-Complete the function header by adding the parameter name, word.
-Assign the result of concatenating word with '!!!' to shout_word.
-Print the value of shout_word.
-Call the shout() function, passing to it the string, 'congratulations'.
+Instructions
+-Complete the function header by adding the appropriate function name, shout.
+-In the function body, concatenate the string, 'congratulations' with another string,
+'!!!'. Assign the result to shout_word.
+-Print the value of shout_word.
+-Call the shout function.
 
 
 # Define the function shout
@@ -16,5 +19,28 @@ def shout():
 
 # Call shout
 shout()
-  
 ----------------------------------------------------------------------------------------------------------------------------------
+Complete the function header by adding the parameter name, word.
+Assign the result of concatenating word with '!!!' to shout_word.
+Print the value of shout_word.
+Call the shout() function, passing to it the string, 'congratulations'.
+
+
+# Define shout with the parameter, word
+def shout(word):
+    """Print a string with three exclamation marks"""
+    # Concatenate the strings: shout_word
+    shout_word = word + '!!!'
+
+    # Print shout_word
+    print(shout_word)
+
+# Call shout with the string 'congratulations'
+shout('congratulations')
+----------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
