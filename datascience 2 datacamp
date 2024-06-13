@@ -28,3 +28,14 @@ new_fellowship = {member: len(member) for member in fellowship}
 
 # Print the new dictionary
 print(new_fellowship)
+
+
+answers: https://rpubs.com/datttrian/python-toolbox-part-2
+
+
+
+
+
+
+
+
