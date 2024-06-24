@@ -1,0 +1,273 @@
+https://github.com/odenipinedo/Python/blob/master/datacamp/preprocessing%20for%20machine%20learning%20in%20Python.ipynb
+
+What is data preprocessing?
+
+beyond cleaning and exploratory data analysis
+prepping data for modeling e.g. transforming categorical data to numeric
+Pandas
+.columns
+.dtypes
+.describe()
+remove missing data
+.dropna() - drop rows with NA values (axis=0, thresh=1)
+df["B"].isnull().sum() - sum of all null values for specific column
+df[df["B"].notnull()] - index for values that are not null for specific columns
+.drop([1, 2, 3]) - drop specific rows
+.drop("A", axis = 1) - drop specific columns
+df[df["B"] == 7] - boolean indexing of columns
+
+===========
+# Check how many values are missing in the category_desc column
+#print(volunteer["category_desc"].isnull().sum())
+
+# Subset the volunteer dataset
+#volunteer_subset = volunteer[volunteer["category_desc"].notnull()]
+
+# Print out the shape of the subset
+#print(volunteer_subset.shape)
+
+#################################################
+#<script.py> output:
+#    48
+#    (617, 35)
+#################################################
+
+------------------------------------------------------------------------------------------------------------
+Working with data types
+
+Why are types important?
+.dtypes
+object - string/mixed types
+int64 - integer
+float64 - float
+datetime64 (or timedelta) - datetime
+Converting column types
+.astype("float")
+
+==========
+# Print the head of the hits column
+#print(volunteer["hits"].head())
+
+# Convert the hits column to type int
+#volunteer["hits"] = volunteer["hits"].astype("int")
+
+# Look at the dtypes of the dataset
+#print(volunteer.dtypes)
+
+------------------------------------------------------------------------------------------------------------
+Class distribution
+
+How do you split train/test when your samples are not normally distributed?
+Stratified sampling
+from train_test_split method .value_counts()
+parameter for train_test_split is "stratify="
+
+# Create a data with all columns except category_desc
+#volunteer_X = volunteer.drop("category_desc", axis=1)
+
+# Create a category_desc labels dataset
+#volunteer_y = volunteer[["category_desc"]]
+
+# Use stratified sampling to split up the dataset according to the volunteer_y dataset
+#X_train, X_test, y_train, y_test = train_test_split(volunteer_X, volunteer_y, stratify=volunteer_y)
+
+# Print out the category_desc counts on the training y labels
+#print(y_train["category_desc"].value_counts())
+
+------------------------------------------------------------------------------------------------------------
+Standardizing Data
+
+scikit-learn models assume normally distributed data
+applied to continuous numerical data
+linearity assumptions
+types discussed
+log normalization
+feature scaling
+when to standardize models
+model in linear space
+dataset features have high variance
+dataset features are continuous and on different scales
+
+============
+# Split the dataset and labels into training and test sets
+#X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+# Fit the k-nearest neighbors model to the training data
+#knn.fit(X_train, y_train)
+
+# Score the model on the test data
+#print(knn.score(X_test, y_test))
+
+#################################################
+#<script.py> output:
+#    0.5333333333333333
+#################################################
+#You can see that the accuracy score is pretty low. Let's explore
+#methods to improve this score.
+------------------------------------------------------------------------------------------------------------
+
+Log normalization
+
+applies log transformation to feature(s) with high variance relative to other features
+helps feature(s) approach normality
+takes the log of e (2.718)
+e.g. log 30 = 3.4, log 300 = 5.7, log 3000 = 8
+captures relative changes, the magnitude of change, and keeps everything in the positive space
+
+============
+#Numpy has been imported as np in your workspace.
+
+# Print out the variance of the Proline column
+#print(wine["Proline"].var())
+
+# Apply the log normalization function to the Proline column
+#wine["Proline_log"] = np.log(wine["Proline"])
+
+# Check the variance of the normalized Proline column
+#print(wine["Proline_log"].var())
+
+#################################################
+#<script.py> output:
+#    99166.71735542436
+#    0.17231366191842012
+#################################################
+#  The np.log() function is an easy way to log normalize a column.
+
+------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+Scaling data for feature comparison
+------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+
+What is feature scaling?
+features on different scales
+model with linear characteristics
+center features with mean of zero and transform unit variance to same
+transforms to approximately normal distribution
+
+===============
+# Import StandardScaler from scikit-learn
+#from sklearn.preprocessing import StandardScaler
+
+# Create the scaler
+#ss = StandardScaler()
+
+# Take a subset of the DataFrame you want to scale
+#wine_subset = wine[['Ash', 'Alcalinity of ash', 'Magnesium']]
+
+# Apply the scaler to the DataFrame subset
+#wine_subset_scaled = ss.fit_transform(wine_subset)
+
+wine[['Ash', 'Alcalinity of ash', 'Magnesium']].describe()
+
+------------------------------------------------------------------------------------------------------------
+Scaling data - standardizing columns
+Since we know that the Ash, Alcalinity of ash, and Magnesium columns in the wine dataset are all on different scales, let's standardize them in a way that allows for use in a linear model.
+
+Instructions
+Import the StandardScaler class.
+Instantiate a StandardScaler() and store it in the variable, scaler.
+Create a subset of the wine DataFrame containing the Ash, Alcalinity of ash, and Magnesium columns, assign it to wine_subset.
+Fit and transform the standard scaler to wine_subset.
+
+# Import StandardScaler
+from sklearn.preprocessing import StandardScaler
+
+# Create the scaler
+scaler = StandardScaler()
+
+# Subset the DataFrame you want to scale 
+wine_subset = wine[['Ash','Alcalinity of ash','Magnesium']]
+
+# Apply the scaler to wine_subset
+wine_subset_scaled = scaler.fit_transform(wine_subset)
+
+------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+Standardized data and modeling
+------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+K-nearest Neighbors (KNN)
+The k-nearest neighbors (KNN) algorithm is a non-parametric, supervised learning classifier, which uses proximity to make classifications or predictions about the grouping of 
+an individual data point. It is one of the popular and simplest classification and regression classifiers used in machine learning today.
+------------------------------------------------------------------------------------------------------------
+WORKFLOW FOR TRAINING A MODEL IN SCIKIT-LEARN
+The workflow for training a model in scikit-learn starts with splitting the data into a training and test set. 
+This can be done with scikit-learn's train_test_split function. 
+Splitting the data will allow us to evaluate the model's performance using unseen data, rather than evaluating its performance on the data it was trained on. 
+Once the data has been split, we can begin preprocessing the training data. 
+It's really important to split the data prior to preprocessing, so none of the test data is used to train the model. 
+When non-training data is used to train the model, this is called data leakage, and it should be avoided so that any performance metrics are reflective of the model's ability to generalize to unseen data. 
+We instantiate a k-neighbors classifier and a standard scaler to scale our features. 
+Here, we preprocess and fit the training features using the fit_transform method, and preprocess the test features using the transform method. 
+Using the transform method means that the test features won't be used to fit the model and avoids data leakage. 
+Now that we've finished preprocessing, we can fit the KNN model to the scaled training features, and return the test set accuracy using the score method on the scaled test features and test labels.
+
+------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------
+KNN on non-scaled data
+Before adding standardization to your scikit-learn workflow, you'll first take a look at the accuracy of a K-nearest neighbors model on the wine dataset without standardizing the data.
+
+The knn model as well as the X and y data and labels sets have been created already.
+
+Instructions
+Split the dataset into training and test sets.
+Fit the knn model to the training data.
+Print out the test set accuracy of your trained knn model.
+
+# Split the dataset and labels into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=42)
+
+# Fit the k-nearest neighbors model to the training data
+knn.fit(X_train, y_train)
+
+# Score the model on the test data
+print(knn.score(X_test, y_test))
+------------------------------------------------------------------------------------------------------------
+KNN on scaled data
+The accuracy score on the unscaled wine dataset was decent, but let's see what you can achieve by using standardization. 
+Once again, the knn model as well as the X and y data and labels set have already been created for you.
+
+Instructions
+Create the StandardScaler() method, stored in a variable named scaler.
+Scale the training and test features, being careful not to introduce data leakage.
+Fit the knn model to the scaled training data.
+Evaluate the model's performance by computing the test set accuracy.
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=y, random_state=42)
+
+# Instantiate a StandardScaler
+scaler = StandardScaler()
+
+# Scale the training and test features
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Fit the k-nearest neighbors model to the training data
+knn.fit(X_train_scaled, y_train)
+
+# Score the model on the test data
+print(knn.score(X_test_scaled, y_test))
+------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
